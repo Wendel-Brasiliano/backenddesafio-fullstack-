@@ -27,3 +27,12 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Servidor rodando na porta ${PORT}`);
 });
+
+// 
+const taskRoutes = require('./src/routes/taskRoutes');
+
+// 
+app.use('/api/users', userRoutes);
+app.use('/api/tasks', taskRoutes); // Adicione esta linha aqui!
+
+// 
