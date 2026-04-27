@@ -1,22 +1,15 @@
 const StudyTask = require('../models/StudyTask');
 
-// Criar nova tarefa 
 exports.createTask = async (req, res) => {
     try {
-        const { title, description } = req.body;
-        const task = new StudyTask({
-            title,
-            description,
-            user: req.user.id // Vincula a tarefa 
-        });
+        const task = new StudyTask({ title: req.body.title, user: req.user.id });
         await task.save();
         res.status(201).json(task);
     } catch (error) {
-        res.status(400).json({ message: "Erro ao criar tarefa de estudo" });
+        res.status(400).json({ message: "Erro ao criar tarefa" });
     }
 };
 
-// Listar todas as tarefas do usuário autenticado
 exports.getTasks = async (req, res) => {
     try {
         const tasks = await StudyTask.find({ user: req.user.id }).sort({ createdAt: -1 });
@@ -26,16 +19,11 @@ exports.getTasks = async (req, res) => {
     }
 };
 
-// Deletar uma tarefa específica
 exports.deleteTask = async (req, res) => {
     try {
-        const task = await StudyTask.findById(req.params.id);
-        if (!task || task.user.toString() !== req.user.id) {
-            return res.status(404).json({ message: "Tarefa não encontrada" });
-        }
-        await task.deleteOne();
-        res.json({ message: "Tarefa removida com sucesso!" });
+        await StudyTask.findOneAndDelete({ _id: req.params.id, user: req.user.id });
+        res.json({ message: "Tarefa removida!" });
     } catch (error) {
-        res.status(500).json({ message: "Erro ao deletar tarefa" });
+        res.status(500).json({ message: "Erro ao deletar" });
     }
 };

@@ -1,10 +1,9 @@
 const mongoose = require('mongoose');
 
-const studyTaskSchema = new mongoose.Schema({
-  title: { type: String, required: true }, // Ex: Inquérito Policial
-  subject: { type: String, required: true }, // Ex: Processo Penal
-  status: { type: String, enum: ['pendente', 'concluído'], default: 'pendente' },
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
-}, { timestamps: true });
+const taskSchema = new mongoose.Schema({
+    title: { type: String, required: true },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    createdAt: { type: Date, default: Date.now }
+});
 
-module.exports = mongoose.model('StudyTask', studyTaskSchema);
+module.exports = mongoose.model('StudyTask', taskSchema);
